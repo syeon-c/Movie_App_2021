@@ -1,30 +1,24 @@
 import { waitForDomChange } from "@testing-library/react"
 import React from "react"
 import PropTypes from "prop-types"
+import axios from "axios";
 
 class App extends React.Component {
     state = {
-      count: 0
+      isLoading: true,
+      movies: []
     };
-
-    add = () => {
-      this.setState(current => ({ count: this.state.count + 1 }))
-    };
-
-    min = () => {
-      this.setState(current => ({ count: this.state.count - 1 }))
-    };
-    
-    render(){
-      return (
-        <div>
-          <h1>The count: {this.state.count}</h1>
-          <button onClick={this.add}>Add</button>
-          <button onClick={this.min}>Minus</button>
-        </div>
-        
-      ) 
+    getMovies = async () => {
+      const movie  = await axios.get("https://yts-proxy.nomadcoders1.now.sh/list_movies.json")
     }
-}
+    componentDidMount() {
+      this.getMovies();
+    }
+
+    render() {
+      const { isLoading } = this.state;
+      return <div> {isLoading ? "Loading...." : "We are ready"} </div>;
+    }
+  }
 
 export default App;
